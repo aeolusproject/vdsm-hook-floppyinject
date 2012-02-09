@@ -6,7 +6,7 @@ Name: vdsm-hook-floppyinject
 Source: %{floppyinject_name}.tar.gz
 Version: 1.0
 Vendor: Red-Had
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: GPLv2+
 Group: Applications/System
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}

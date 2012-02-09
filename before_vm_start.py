@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 import os
+import base64
 import sys
 import ast
 import utils
@@ -14,7 +15,7 @@ floppyinject vdsm hook
 ======================
 Hook create a floppy disk on the fly with user provided content.
 ie. user supply file name and file content and hooks will create
-floppy disk on destination host, will mount it as floppy disk - 
+floppy disk on destination host, will mount it as floppy disk -
 and will handle migration.
 giving the input "myfile.vfd=data" will create a floppy with single
 file name myfile.vfd and the file content will be "data"
@@ -44,7 +45,7 @@ def addFloppyElement(domxml, path):
     disk.setAttribute('type', 'file')
     disk.setAttribute('device', 'floppy')
     devices.appendChild(disk)
-    
+
     source = domxml.createElement('source')
     source.setAttribute('file', path)
     disk.appendChild(source)
@@ -80,7 +81,7 @@ def createFloppy(filename, path, content):
         sys.stderr.write('floppyinject: error /bin/chmod: %s' % err)
         sys.exit(2)
 
-    
+
     # mount the floppy file
     mntpoint = tempfile.mkdtemp()
     command = ['/bin/mount', '-o', 'loop,uid=36,gid=36' , path, mntpoint]
@@ -90,6 +91,8 @@ def createFloppy(filename, path, content):
         sys.stderr.write('floppyinject: error /bin/mount: %s' % err)
         sys.exit(2)
 
+    # base64 decode the content
+    content = base64.decodestring(content)
 
     # write the file content
     contentpath = os.path.join(mntpoint, filename)
