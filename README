@@ -1,0 +1,21 @@
+floppyinject vdsm hook
+======================
+Hook create a floppy disk on the fly with user provided content.
+ie. user supply file name and file content and hooks will create
+floppy disk on destination host, will mount it as floppy disk - 
+and will handle migration.
+giving the input "myfile.vfd=data" will create a floppy with single
+file name myfile.vfd and the file content will be "data"
+
+syntax:
+floppyinject=myfile.txt:<file content>
+
+libvirt:
+<disk type='file' device='floppy'>
+    <source file='/tmp/my.vfd'/>
+    <target dev='fda' />
+</disk>
+
+Note:
+    some linux distro need to load the floppy disk kernel module:
+    # modprobe floppy

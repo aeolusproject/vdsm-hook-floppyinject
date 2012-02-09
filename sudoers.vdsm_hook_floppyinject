@@ -1,0 +1,6 @@
+vdsm  ALL=(ALL) NOPASSWD: /bin/chown
+vdsm  ALL=(ALL) NOPASSWD: /bin/chmod
+vdsm  ALL=(ALL) NOPASSWD: /bin/mount
+vdsm  ALL=(ALL) NOPASSWD: /bin/umount
+vdsm  ALL=(ALL) NOPASSWD: /bin/rmdir
+vdsm  ALL=(ALL) NOPASSWD: /sbin/mkfs.msdos
