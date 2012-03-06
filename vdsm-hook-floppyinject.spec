@@ -5,12 +5,12 @@ Summary: Creating and mounting floppy disk for Red-Hat VDSM
 Name: vdsm-hook-floppyinject
 Source: %{floppyinject_name}.tar.gz
 Version: 1.0
-Vendor: Red-Had
-Release: 2%{?dist}
+Vendor: Red Hat
+Release: 6%{?dist}
 License: GPLv2+
 Group: Applications/System
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}
-ExclusiveArch: x86_64
+ExclusiveArch: i386 x86_64
 Requires: vdsm
 
 %description
@@ -69,3 +69,18 @@ exit 0
 %doc
 
 %changelog
+* Thu Mar 01 2012 Greg Blomquist <gblomqui@redhat.com> 1.0-6
+- Updates to the floppyinject hook to handle errors and some concurrency fixes
+- https://bugzilla.redhat.com/show_bug.cgi?id=798775
+
+* Wed Feb 15 2012 John Eckersberg <jeckersb@redhat.com> - 1.0-5
+- Update ExclusiveArch to include i386
+
+* Wed Feb 15 2012 John Eckersberg <jeckersb@redhat.com> - 1.0-4
+- Bump spec to rebuild for i386
+
+* Thu Feb  9 2012 John Eckersberg <jeckersb@redhat.com> - 1.0-3
+- Bump spec, new source from https://bugzilla.redhat.com/show_bug.cgi?id=788613#c7
+
+* Thu Feb 09 2012 Michal Fojtik <mfojtik@redhat.com> - 1.0-2
+- Initial package
