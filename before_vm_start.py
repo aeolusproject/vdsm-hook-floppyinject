@@ -1,10 +1,8 @@
 #!/usr/bin/python
 
 import os
-import base64
 import sys
 import ast
-import utils
 import hooking
 import tempfile
 import traceback
@@ -69,19 +67,19 @@ def createFloppy(filename, path, content):
 
     # create floppy file system
     command = ['/sbin/mkfs.msdos', '-C', path, '1440']
-    retcode, out, err = utils.execCmd(command, sudo=True, raw=True)
+    retcode, out, err = hooking.execCmd(command, sudo=True, raw=True)
     if retcode != 0:
         log(format_error(command, err))
         raise Exception(format_error(command, err))
 
     owner = '36:36'
     command = ['/bin/chown', owner, path]
-    retcode, out, err = utils.execCmd(command, sudo=True, raw=True)
+    retcode, out, err = hooking.execCmd(command, sudo=True, raw=True)
     if retcode != 0:
         raise Exception(format_error(command, err))
 
     command = ['/bin/chmod', '0770', path]
-    retcode, out, err = utils.execCmd(command, sudo=True, raw=True)
+    retcode, out, err = hooking.execCmd(command, sudo=True, raw=True)
     if retcode != 0:
         raise Exception(format_error(command, err))
 
@@ -90,12 +88,9 @@ def createFloppy(filename, path, content):
         mntpoint = tempfile.mkdtemp()
         command = ['/bin/mount', '-o', 'loop,uid=36,gid=36' , path, mntpoint]
         log('shahar: %s\n' % ' '.join(command))
-        retcode, out, err = utils.execCmd(command, sudo=True, raw=True)
+        retcode, out, err = hooking.execCmd(command, sudo=True, raw=True)
         if retcode != 0:
             raise Exception(format_error(command, err))
-
-        # base64 decode the content
-        content = base64.decodestring(content)
 
         # write the file content
         contentpath = os.path.join(mntpoint, filename)
@@ -105,14 +100,14 @@ def createFloppy(filename, path, content):
     finally:
         # unmount the loopback
         command = ['/bin/umount', mntpoint]
-        retcode, out, err = utils.execCmd(command, sudo=True, raw=True)
+        retcode, out, err = hooking.execCmd(command, sudo=True, raw=True)
         if retcode != 0:
             # record the error, but don't die ... still need to rm tmpdir
             log("floppyinject error: %s (%s)" % (command.join(" "), err))
 
         # remove tempdir
         command = ['/bin/rmdir',  mntpoint]
-        retcode, out, err = utils.execCmd(command, sudo=True, raw=True)
+        retcode, out, err = hooking.execCmd(command, sudo=True, raw=True)
         if retcode != 0:
             # record the error, but don't die
             log("floppyinject error: %s (%s)" % (command.join(" "), err))
