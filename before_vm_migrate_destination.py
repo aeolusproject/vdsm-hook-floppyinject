@@ -3,7 +3,6 @@
 import os
 import sys
 import ast
-import utils
 import hooking
 import tempfile
 import traceback
@@ -16,14 +15,14 @@ def createFloppy(filename, path, content):
 
     # create floppy file system
     command = ['/sbin/mkfs.msdos', '-C', path, '1440']
-    retcode, out, err = utils.execCmd(command, sudo=True, raw=True)
+    retcode, out, err = hooking.execCmd(command, sudo=True, raw=True)
     if retcode != 0:
         sys.stderr.write('floppyinject-before-dest-migration: error /sbin/mkfs.msdos fs: %s\n' % err)
         sys.exit(2)
 
     owner = '36:36'
     command = ['/bin/chown', owner, path]
-    retcode, out, err = utils.execCmd(command, sudo=True, raw=True)
+    retcode, out, err = hooking.execCmd(command, sudo=True, raw=True)
     if retcode != 0:
         sys.stderr.write('floppyinject-before-dest-migration: error /bin/chown: %s' % err)
         sys.exit(2)
@@ -31,7 +30,7 @@ def createFloppy(filename, path, content):
 
     # create floppy file system
     command = ['/bin/chmod', '0770', path]
-    retcode, out, err = utils.execCmd(command, sudo=True, raw=True)
+    retcode, out, err = hooking.execCmd(command, sudo=True, raw=True)
     if retcode != 0:
         sys.stderr.write('floppyinject-before-dest-migration: error /bin/chmod: %s' % err)
         sys.exit(2)
@@ -41,7 +40,7 @@ def createFloppy(filename, path, content):
     mntpoint = tempfile.mkdtemp()
     command = ['/bin/mount', '-o', 'loop,uid=36,gid=36' , path, mntpoint]
     sys.stderr.write('shahar: %s\n' % ' '.join(command))
-    retcode, out, err = utils.execCmd(command, sudo=True, raw=True)
+    retcode, out, err = hooking.execCmd(command, sudo=True, raw=True)
     if retcode != 0:
         sys.stderr.write('floppyinject-before-dest-migration: error /bin/mount: %s' % err)
         sys.exit(2)
@@ -56,7 +55,7 @@ def createFloppy(filename, path, content):
 
     # unmounting
     command = ['/bin/umount', mntpoint]
-    retcode, out, err = utils.execCmd(command, sudo=True, raw=True)
+    retcode, out, err = hooking.execCmd(command, sudo=True, raw=True)
     if retcode != 0:
         sys.stderr.write('floppyinject-before-dest-migration: error /bin/umount: %s' % err)
         sys.exit(2)
@@ -64,7 +63,7 @@ def createFloppy(filename, path, content):
 
     # remove tempdir
     command = ['/bin/rmdir',  mntpoint]
-    retcode, out, err = utils.execCmd(command, sudo=True, raw=True)
+    retcode, out, err = hooking.execCmd(command, sudo=True, raw=True)
     if retcode != 0:
         sys.stderr.write('floppyinject-before-dest-migration: error /bin/rmdir: %s' % err)
         sys.exit(2)
