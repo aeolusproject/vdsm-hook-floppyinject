@@ -92,6 +92,9 @@ def createFloppy(filename, path, content):
         if retcode != 0:
             raise Exception(format_error(command, err))
 
+        # base64 decode the content
+        content = base64.decodestring(content)
+
         # write the file content
         contentpath = os.path.join(mntpoint, filename)
         f = open(contentpath, 'w')
